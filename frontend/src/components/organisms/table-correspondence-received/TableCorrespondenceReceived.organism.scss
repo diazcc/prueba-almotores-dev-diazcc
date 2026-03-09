@@ -1,0 +1,39 @@
+.table-correspondence-received {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    flex-grow: 1;
+    // background-color: white;
+    // padding: 1rem;
+    &__nav-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-left: 3px solid var(--border-right-line-card);
+        background-color: white;
+        gap: 1rem;
+        &__filter-item{
+          display: flex;
+          flex-direction: column;  
+          flex: 1;
+          label{
+            font-weight: bolder;
+          }
+        }
+    }
+    .table{
+        padding: 1rem;
+        box-sizing: border-box;
+        background-color: white;
+        border-left: 3px solid var(--border-right-line-card);
+
+        &__row {
+            grid-template-columns: 20% repeat(auto-fit, minmax(1px, 1fr)); // Moficator of cass global style.scss structure 
+        }
+    }
+}
+
+.hidden{
+    opacity: 0;
+}
