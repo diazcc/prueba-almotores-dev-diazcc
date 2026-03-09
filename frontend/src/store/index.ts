@@ -145,14 +145,12 @@ function initializeStore() {
   }
 
   function clearIdToken() {
-    idToken.value = null;
     localStorage.removeItem("idToken");
-    localStorage.removeItem("uid");
     axios.defaults.headers.common["Authorization"] = "";
   }
 
   async function isAuthenticated() {
-    return !!idToken.value;
+    return !!localStorage.getItem('idToken');
   }
   return {
     access,

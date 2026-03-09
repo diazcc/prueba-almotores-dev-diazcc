@@ -56,6 +56,22 @@ const UserService = {
     }
 },
 
+    async backendLogin(email: string, password: string): Promise<boolean> {
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/login', {
+                email: email,
+                password: password
+            });
+            const token = response.data.access_token;
+            localStorage.setItem('idToken', token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            return true;
+        } catch (error) {
+            console.error("Error en el login del backend:", error);
+            throw error;
+        }
+    },
+
     getIdUserExtern(){
         return axios.get('/api/administration/external_users/')
             .then(response => response.data.response)

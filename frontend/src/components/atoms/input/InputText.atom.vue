@@ -37,7 +37,7 @@
     :id="dataInput.id"
     :name="dataInput.name"
     :class="['input input--' + dataInput.classInput]"
-    v-model="lowercaseModel"
+    v-model="dataInput.model"
     :type="dataInput.type"
     @input="handleInput"
     :placeholder="t(dataInput.placeholder)"
@@ -47,11 +47,10 @@
     :onchange="dataInput?.onchange"
     :title="t((dataInput?.title!=null)&&(dataInput?.title!='')?dataInput?.title:'')"
     @blur="dataInput?.handleBlur"
-    @change="(dataInput?.onChange&& dataInput?.onChange(lowercaseModel))"
+    @change="(dataInput?.onChange&& dataInput?.onChange(dataInput.model))"
     >
 </template>
 <script setup lang="ts">
-import { computed } from 'vue';
 import { defineProps } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -59,33 +58,12 @@ const { t } = useI18n();
 const props =  defineProps(['dataInput']);
 const emits = defineEmits(['inputChange']);
 
-// Computed property para manejar lowercase
-const lowercaseModel = computed({
-  get: () => {
-    // Si está definido explícitamente que no sea lowercase, devolver el valor original
-    // de esta manera se asegura que los valores que se envien a la base de datos sean consistentes
-    if (props.dataInput.lowercase === false) {
-      return props.dataInput.model;
-    }
-    // Si no se especifica, o se especifica como true, convertir a lowercase
-    return (props.dataInput.model || '').toString().toLowerCase();
-  },
-  set: (value: string) => {
-    // Actualizar el modelo original
-    props.dataInput.model = props.dataInput.lowercase !== false 
-      ? value.toLowerCase() 
-      : value;
-  }
-});
-
 const handleInput = (event: Event) => {
   const value = (event.target as HTMLInputElement).value;
   
-  // Emitir el valor (convertido a lowercase si es necesario)
+  // Emitir el valor sin modificar
   emits('inputChange', { 
-    [props.dataInput.name]: props.dataInput.lowercase !== false 
-      ? value.toLowerCase() 
-      : value 
+    [props.dataInput.name]: value
   });
 };
 </script>
