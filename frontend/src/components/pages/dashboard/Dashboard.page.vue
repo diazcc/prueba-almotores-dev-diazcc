@@ -7,8 +7,7 @@
 import { reactive, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import DashboardTemplate from '../../templates/dashboard/Dashboard.template.vue';
-import FilingServices from '../../../services/FilingServices';
-import RecordsServices from '../../../services/RecordsServices';
+import axios from 'axios';
 import UserValidators from '../../../validators/UserValidators';
 
 const router: any = useRouter();
@@ -93,103 +92,29 @@ onMounted(() => {
 })
 
 function callServices() {
-    getFilings();
-    getRecords();
+    getUsers();
 }
 
-
-function getFilings() {
-    /* dataDashboard.dataTableCorrespondenceEntry.stateLoadData = true;
+function getUsers() {
     dataDashboard.dataTableCorrespondenceInternal.stateLoadData = true;
-    dataDashboard.dataTableCorrespondenceEntry.data.lists = [];
-    dataDashboard.dataTableCorrespondenceInternal.data.lists = [];
-    FilingServices.getMinEntryFilings()
-        .then((response:any)=>{
-            dataDashboard.dataTableCorrespondenceEntry.data.lists = response.results
-                .map((value: any) => ({
-                    id: value.record_id,
-                    subject: value.subject,
-                    remitter: UserValidators.validationRemitter(value.remitter),
-                    radication: value.filing_code,
-                    type: "Natural",
-                    related_record_info: value.related_record_info,
-                    percentage_of_relationship_matrix:value.percentage_of_relationship_matrix,
-                    days_left:value.days_left
-                }));
-                dataDashboard.dataTableCorrespondenceEntry.stateLoadData = false;
-        }).catch((error:any)=>{
-            dataDashboard.dataTableCorrespondenceEntry.stateLoadData = false;
-            console.error(error);
-        });
-    FilingServices.getMinInternalFilings()
-        .then((response:any)=>{
-            dataDashboard.dataTableCorrespondenceInternal.data.lists = response.results
-                .map((value: any) => ({
-                    id: value.record_id,
-                    subject: value.subject,
-                    remitter: UserValidators.validationRemitter(value.remitter),
-                    radication: value.filing_code,
-                    type: "Natural",
-                    related_record_info: value.related_record_info,
-                    percentage_of_relationship_matrix:value.percentage_of_relationship_matrix,
-                    days_left:value.days_left
-                }));
-            dataDashboard.dataTableCorrespondenceInternal.stateLoadData = false;
-        }).catch((error:any)=>{
-            dataDashboard.dataTableCorrespondenceInternal.stateLoadData = false;
-            console.error(error);
-        }) */
-       FilingServices.getFilesSent()
-        .then((response:any)=>{
-      console.log(response);
-            dataDashboard.dataTableCorrespondenceEntry.data.lists = response.results
-                .map((value: any) => ({
-                    id: value.id,
-                    subject: value.subject,
-                    remitter: value.creator_user,
-                    radication: value.date_created,
-                    type: "Natural",
-                    related_record_info: 'value.related_record_info',
-                    percentage_of_relationship_matrix:'value.percentage_of_relationship_matrix',
-                    status:value.status,
-                    days_left:'value.days_left'
-                }));
-                dataDashboard.dataTableCorrespondenceEntry.stateLoadData = false;
-        }).catch((error:any)=>{
-            dataDashboard.dataTableCorrespondenceEntry.stateLoadData = false;
-            console.error(error);
-        });
     
-       RecordsServices.searchFilings('', 1, 10)
+    axios.get('http://127.0.0.1:8000/users', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('idToken')}`
+        }
+    })
     .then((response: any) => {
-      console.log(response);
-      dataDashboard.dataTableCorrespondenceInternal.data.lists = response.results
-                .map((value: any) => ({
-                    id: value.id,
-                    subject: value.subject,
-                    remitter: value.creator_user,
-                    radication: value.date_created,
-                    type: "Natural",
-                    related_record_info: 'value.related_record_info',
-                    percentage_of_relationship_matrix:'value.percentage_of_relationship_matrix',
-                    days_left:'value.days_left',
-                    status:value.status
-                }));
-     
+        dataDashboard.dataTableCorrespondenceInternal.data.lists = response.data.users.map((user: any) => ({
+            id: user.id,
+            name: user.name,
+            email: user.email
+        }));
+        dataDashboard.dataTableCorrespondenceInternal.stateLoadData = false;
     })
     .catch((error: any) => {
-      console.error("Error fetching data:", error);
+        console.error('Error fetching users:', error);
+        dataDashboard.dataTableCorrespondenceInternal.stateLoadData = false;
     });
-}
-
-function getRecords() {
-    /* RecordsServices.searchRecordsStatic()
-        .then((response:any) => {
-            dataDashboard.dataStatistic.dataChartPie.data = response.results;
-        })
-        .catch((error:any) => {
-            console.error(error);
-        }); */
 }
 
 </script>

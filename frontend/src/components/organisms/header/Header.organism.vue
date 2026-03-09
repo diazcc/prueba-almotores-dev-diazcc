@@ -6,7 +6,7 @@
         <ol class="header__content">
             <li class="header__content__icon">
                 <router-link to="/home/dashboard">
-                    {{ 'DOCMAIL' }}
+                    {{ 'ALMOTORES' }}
                 </router-link>
             </li>
             

@@ -4,7 +4,7 @@
             <a class="render-loading__card__line-container">
                 <div class="render-loading__card__line-container__line"></div>
             </a>
-            <p class="render-loading__card__name">DOCMAIL</p>
+            <p class="render-loading__card__name">ALMOTORES</p>
             <p class="render-loading__card__subtitle" >{{ t('please_wait_to_contection_components') }}</p>
             <p class="render-loading__card__message" >{{ t('in_a_less_of_2_min_redirect_to_page') }}</p>
             <p class="render-loading__card__loading" v-if="dataRenderLoading.isLoading">{{ t('loading') }}...</p>

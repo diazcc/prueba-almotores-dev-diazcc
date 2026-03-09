@@ -85,3 +85,18 @@ def me(user=Depends(get_current_user)):
             }
 
     raise HTTPException(status_code=404, detail="User not found")
+
+
+@app.get("/users")
+def get_users(user=Depends(get_current_user)):
+    users = read_users()
+    return {
+        "users": [
+            {
+                "id": u["id"],
+                "name": u["name"],
+                "email": u["email"]
+            }
+            for u in users
+        ]
+    }

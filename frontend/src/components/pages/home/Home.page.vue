@@ -201,19 +201,11 @@ const dataHomeTemplate: any = reactive({
 });
 const mockModules = [
   {
-    name: "correspondence",
+    name: "users",
     state: false,
     templateColor: { menu: "#1E90FF", table: "#F0F8FF" },
     paths: [
-      { name: "received", path: "correspondence/received", state: false },
-    ],
-  },
-  {
-    name: "files",
-    state: false,
-    templateColor: { menu: "#32CD32", table: "#E0FFE0" },
-    paths: [
-      { name: "files", path: "files_records", state: false },
+      { name: "users", path: "correspondence/received", state: false },
     ],
   }
 ];

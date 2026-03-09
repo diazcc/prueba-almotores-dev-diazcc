@@ -1,9 +1,8 @@
 <template>
     <main class="login__wrapper">
         <header class="login__wrapper__header">
-            <h1 style="color:white">
-                DOCMAIL
-            </h1>
+            <h1 style="color:white;font-size: 24px;font-weight: lighter;">
+                ALMOTORES - Andres Diaz Castillo - diazccx@gmail.com - 3146724568   </h1>
             <SelectLangMolecule/>
         </header>
         <article
@@ -15,9 +14,7 @@
             <ul
                 :class="'login__wrapper__content__options login__wrapper__content__options--' + (!dataLogin.stateForm ? 'register' : '')">
                 <CardOptionLogin :dataCardOptionLogin="dataLogin.dataCardOptionLogin"
-                    class="login__wrapper__content__options__card" />
-                <CardOptionLogin :dataCardOptionLogin="dataLogin.dataCardOptionRegister"
-                    class="login__wrapper__content__options__card" />
+                    class="login__wrapper__content__options__card" />   
             </ul>
             <section
                 :class="'login__wrapper__content__form login__wrapper__content__form--' + (!dataLogin.stateForm ? 'register' : '')+' login__wrapper__content__form login__wrapper__content__form--' + (!dataLogin.visible ? 'hidde' : '')">

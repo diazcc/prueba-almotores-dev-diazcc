@@ -9,11 +9,18 @@ import { setupCalendar } from 'v-calendar';
 import { createI18n } from 'vue-i18n';
 import lang from './locales/lang.js';
 import { languageStore } from './store/language.ts';
+import axios from 'axios';
 
 // 👇 Importa tu configuración de Firebase (importante)
 import './firebaseConfig';  // ✅ Esta línea asegura que initializeApp() se ejecute
 
 const app = createApp(App);
+
+// Configurar axios con el token si existe
+const token = localStorage.getItem('idToken');
+if (token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
 // Initialize pinia
 const pinia = createPinia();
