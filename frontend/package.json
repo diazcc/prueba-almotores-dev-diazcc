@@ -32,7 +32,6 @@
     "axios": "^1.6.7",
     "chart.js": "^3.9.1",
     "face-api.js": "^0.20.0",
-    "firebase": "^12.5.0",
     "gsap": "^3.12.5",
     "lodash": "^4.17.21",
     "marked": "^15.0.6",
@@ -47,7 +46,6 @@
     "vue3-pdf-app": "^1.0.3"
   },
   "devDependencies": {
-    "@types/firebase": "^2.4.32",
     "@vitejs/plugin-vue": "^6.0.1",
     "jest": "^30.2.0",
     "sass": "^1.70.0",

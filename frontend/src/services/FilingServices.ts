@@ -1,6 +1,5 @@
 // LoginService.ts
 import axios from 'axios';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const FilingServices = {
     getFilingsCreatedByUser(searched_value:any = "", page:any = 1, page_size:any = null) {
@@ -15,20 +14,7 @@ const FilingServices = {
     },
     async createFiling(formData: any) {
           try {
-              const auth = getAuth();
-              const user = auth.currentUser;
-              if (!user) throw new Error("Usuario no autenticado");
-        
-              const idToken = await user.getIdToken(); // 👈 Token JWT real
-        
-              const response = await axios.post('/request', formData,
-                {
-                  headers: {
-                    "Authorization": idToken, // 👈 Enviamos el token al backend
-                    "Content-Type": "multipart/form-data",
-                  },
-                }
-              );
+              const response = await axios.post('/request', formData);
               console.log("sssssss:", response);
         
               return response.data;
@@ -105,28 +91,8 @@ const FilingServices = {
 
     async  getFilesSent(searched_value:any = "", page:any = 1, page_size:any = 10) {
         try {
-            const auth = getAuth();
-
-            // Esperar hasta que Firebase determine el estado del usuario
-            const user :any= await new Promise((resolve) => {
-            const unsub = onAuthStateChanged(auth, (user) => {
-                unsub();
-                resolve(user);
-            });
-            });
-
-            if (!user) throw new Error("Usuario no autenticado");
-
-            const idToken = await user.getIdToken();
-
             const response = await axios.get(
-            `/requests-sent?searched_value=${searched_value}&page=${page}&page_size=${page_size}`,
-            {
-                headers: {
-                "Authorization": idToken,
-                "Content-Type": "application/json",
-                },
-            }
+            `/requests-sent?searched_value=${searched_value}&page=${page}&page_size=${page_size}`
             );
 
             return response.data.response;

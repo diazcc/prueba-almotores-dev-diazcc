@@ -1,6 +1,3 @@
-import { getAuth,signInWithEmailAndPassword } from 'firebase/auth';
-// LoginService.ts
-import { auth } from '../firebaseConfig.ts';
 import axios from 'axios';
 import { accessStore } from '../store/index.ts'; // Importa el store como un export nombrado
 import constants from '../constants/index.js'
@@ -25,45 +22,13 @@ const UserService = {
             .catch((error: any) => { throw error; });   
     },
     async  login(email: string, password: string): Promise<boolean> {
-    try {
-
-        // 1️⃣ Loguearse con Firebase JS SDK
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-        // 2️⃣ Obtener el ID token del usuario
-        const idToken = await userCredential.user.getIdToken();
-
-        // 3️⃣ Guardar token localmente si quieres (opcional)
-        localStorage.setItem("idToken", idToken);
-        const store = accessStore();
-        store.setIdToken(idToken);
-        // 4️⃣ Enviar el token al backend para validar y obtener datos
-        const response = await axios.post("/verify_token", {
-            id_token: idToken
-        });
-        localStorage.setItem("uid", response.data.uid);
-
-        console.log("Usuario verificado:", response.data);
-
-        // 5️⃣ Opcional: configurar axios para futuras peticiones con el token
-        axios.defaults.headers.common["Authorization"] = "Bearer " + idToken;
-
-        return true;
-
-    } catch (error) {
-        console.error("Error en el login:", error);
-        return false;
-    }
-},
-
-    async backendLogin(email: string, password: string): Promise<boolean> {
         try {
             const response = await axios.post('http://127.0.0.1:8000/login', {
                 email: email,
                 password: password
             });
             const token = response.data.access_token;
-            localStorage.setItem('idToken', token);
+            localStorage.setItem('access_token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             return true;
         } catch (error) {
@@ -78,7 +43,7 @@ const UserService = {
             .catch((error: any) => { throw error; });
     },
     checkLoggedIn(): boolean {
-        const access = localStorage.getItem('access');
+        const access = localStorage.getItem('access_token');
         return !!access;
     },
     async register(data: any): Promise<boolean> {
@@ -162,20 +127,7 @@ const UserService = {
     },
     async createRemitter(data:any){
         try {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (!user) throw new Error("Usuario no autenticado");
-
-      const idToken = await user.getIdToken(); // 👈 Token JWT real
-
-      const response = await axios.post('/remitters/', data,
-        {
-          headers: {
-            "Authorization": idToken, // 👈 Enviamos el token al backend
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.post('/remitters/', data);
 
       return response.data.remitter;
     } catch (error) {
@@ -185,20 +137,8 @@ const UserService = {
     },
   async getRemitters(searched_value: string = "", page: number = 1, page_size: number = 10) {
     try {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (!user) throw new Error("Usuario no autenticado");
-
-      const idToken = await user.getIdToken(); // 👈 Token JWT real
-
       const response = await axios.get(
-        `/remitters?searched_value=${searched_value}&page=${page}&page_size=${page_size}`,
-        {
-          headers: {
-            "Authorization": idToken, // 👈 Enviamos el token al backend
-            "Content-Type": "application/json",
-          },
-        }
+        `/remitters?searched_value=${searched_value}&page=${page}&page_size=${page_size}`
       );
 
       return response.data.response;

@@ -10,7 +10,7 @@ interface UserDataConfig {
   tenant?: string | null;
   key?: string; // Permitir cualquier otra propiedad adicional
 }
-const idToken = ref<string | null>(localStorage.getItem("idToken"));
+const idToken = ref<string | null>(localStorage.getItem("access_token"));
 export const accessStore = defineStore("global", () => {
   // state varaibles
   const access: any = ref("");
@@ -150,7 +150,7 @@ function initializeStore() {
   }
 
   async function isAuthenticated() {
-    return !!localStorage.getItem('idToken');
+    return !!localStorage.getItem('access_token');
   }
   return {
     access,

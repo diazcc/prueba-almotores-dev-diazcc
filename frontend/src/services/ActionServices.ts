@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const ActionServices = {
   sendAssingData(recordId: any, data: any) {
@@ -11,19 +10,6 @@ const ActionServices = {
 // CORREGIDO: Envía el body y los headers correctamente
 async actionFile(requestId: string,action:string) {
     try {
-        const auth = getAuth();
-        // Lógica de autenticación...
-        const user: any = await new Promise((resolve) => {
-            const unsub = onAuthStateChanged(auth, (user) => {
-                unsub();
-                resolve(user);
-            });
-        });
-
-        if (!user) throw new Error("Usuario no autenticado");
-
-        const idToken = await user.getIdToken();
-        
         // 1. Define el nuevo estado (lo que espera el backend)
         const newStatus = "answered"; 
 
@@ -31,12 +17,6 @@ async actionFile(requestId: string,action:string) {
         const response = await axios.patch(
             `/request/${requestId}/status`, // URL
             { status: action }, // 🎯 BODY: El objeto JSON que tu backend espera
-            { // 🔑 HEADERS: Configuración de la solicitud
-                headers: {
-                    "Authorization": idToken,
-                    "Content-Type": "application/json",
-                },
-            }
         );
 
         return response.data.response;
